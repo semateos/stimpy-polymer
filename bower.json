@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "fullscreener": "~1.0.1"
+    "fullscreener": "~1.0.1",
+    "pixi": "git@github.com:GoodBoyDigital/pixi.js.git#v3.0.6"
   }
 }

@@ -23,7 +23,7 @@ module.exports = {
             directory: { path: rootPath + '/public/js' }
         }
     },
-    bower: {
+    bower_components: {
         handler: {
             directory: { path: rootPath + '/public/bower_components' }
         }
