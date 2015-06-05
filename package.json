@@ -1,12 +1,12 @@
 {
-  "name": "stimpy-medium",
-  "description": "A simple yet inventive fellow for making Hapi things.",
-  "version": "0.2.1",
+  "name": "yarn-web",
+  "description": "Yarn Corporation Site",
+  "version": "0.0.1",
   "author": "Sam Mateosian",
-  "private": false,
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/semateos/stimpy-medium.git"
+    "url": "https://github.com/yarn-co/yarn-web.git"
   },
   "contributors": [
     {
@@ -20,7 +20,7 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": "0.10.x"
+    "node": ">=0.10.32"
   },
   "scripts": {
     "start": "node server",
