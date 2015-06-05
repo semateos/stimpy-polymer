@@ -13,6 +13,9 @@
     var bunnyTexture = PIXI.Texture.fromImage('/images/bunny.png');
     var bunny = new PIXI.Sprite(bunnyTexture);
 
+    bunny.anchor.x = 0.5;
+    bunny.anchor.y = 0.5;
+    
     // Setup the position and scale of the bunny
     bunny.position.x = 400;
     bunny.position.y = 300;
