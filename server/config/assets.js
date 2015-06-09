@@ -32,6 +32,9 @@ files = _.map(files, function(file, key){
 
 var development = {
     js: js.concat([
+        'bower_components/threejs/examples/js/libs/dat.gui.min.js',
+        'bower_components/threejs/examples/js/controls/OrbitControls.js',
+        'bower_components/threejs/examples/js/libs/stats.min.js',
         'js/main.js'
     ]),
     css: css.concat([
