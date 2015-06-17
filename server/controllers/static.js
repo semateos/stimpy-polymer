@@ -8,24 +8,40 @@ module.exports = {
             directory: { path: rootPath + '/views/partials' }
         }
     },
+
+    public: {
+      handler: {
+          directory: { path: rootPath + '/public/' }
+      }
+    },
+
     images: {
         handler: {
             directory: { path: rootPath + '/public/images' }
         }
     },
+
     css: {
         handler: {
             directory: { path: rootPath + '/public/css' }
         }
     },
+
     js: {
         handler: {
             directory: { path: rootPath + '/public/js' }
         }
     },
+
     bower_components: {
         handler: {
             directory: { path: rootPath + '/public/bower_components' }
+        }
+    },
+
+    elements: {
+        handler: {
+            directory: { path: rootPath + '/public/elements' }
         }
     }
 }

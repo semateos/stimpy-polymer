@@ -1,5 +1,16 @@
 {% block head %}
-    {% for item in assets.css %}
-        <link rel="stylesheet" href="{{item}}{{version.cache}}"/>
-    {% endfor %}
+
+  <meta charset="UTF-8">
+
+  <title>YARN{% block title %}{% endblock %}</title>
+
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
+  <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="/elements/elements.html">
+
+  {% for item in assets.css %}
+    <link rel="stylesheet" href="{{item}}{{version.cache}}"/>
+  {% endfor %}
 {% endblock %}

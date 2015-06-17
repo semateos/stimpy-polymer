@@ -19,8 +19,8 @@
 				minDistance: 100,
 				limitConnections: true,
 				maxConnections: 20,
-				particleCount: 314
-			}
+				particleCount: 312
+			};
 
 			init();
 			animate();
@@ -101,7 +101,7 @@
 					particlePositions[ i * 3 + 1 ] = y;
 					particlePositions[ i * 3 + 2 ] = z;
 
-          var v = new THREE.Vector3( -1 + Math.random() * 2, -1 + Math.random() * 2,  -1 + Math.random() * 2 )
+          var v = new THREE.Vector3( -1 + Math.random() * 2, -1 + Math.random() * 2,  -1 + Math.random() * 2 );
 
 					// add it to the geometry
 					particlesData.push( {
@@ -187,10 +187,9 @@
 				var colorpos = 0;
 				var numConnected = 0;
 
-				for ( var i = 0; i < particleCount; i++ )
-					particlesData[ i ].numConnections = 0;
-
 				for ( var i = 0; i < particleCount; i++ ) {
+
+          particlesData[ i ].numConnections = 0;
 
 					// get the particle
 					var particleData = particlesData[i];

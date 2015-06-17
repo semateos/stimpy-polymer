@@ -26,5 +26,15 @@ module.exports = [
         method: 'GET',
         path: '/bower_components/{path*}',
         config: controller.bower_components
-    }
+    },
+    {
+        method: 'GET',
+        path: '/elements/{path*}',
+        config: controller.elements
+    },
+    {
+        method: 'GET',
+        path: '/{path*}',
+        config: controller.public
+    },
 ]

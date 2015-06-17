@@ -10,6 +10,7 @@ var files = mainBowerFiles();
 var js = [];
 var css = [];
 
+/*
 files = _.map(files, function(file, key){
 
     var relative = path.relative(config.root + '/public', file);
@@ -28,17 +29,16 @@ files = _.map(files, function(file, key){
 
 	return file;
 });
-
+*/
 
 var development = {
     js: js.concat([
-        'bower_components/threejs/examples/js/libs/dat.gui.min.js',
-        'bower_components/threejs/examples/js/controls/OrbitControls.js',
-        'bower_components/threejs/examples/js/libs/stats.min.js',
-        'js/main.js'
+        //'bower_components/threejs/examples/js/libs/dat.gui.min.js',
+        //'bower_components/threejs/examples/js/controls/OrbitControls.js',
+        //'bower_components/threejs/examples/js/libs/stats.min.js',
+        'js/app.js'
     ]),
     css: css.concat([
-        'bower_components/fullscreener/src/jquery.fullscreener.css',
         'css/styles.css'
     ])
 }
