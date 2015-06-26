@@ -1,0 +1,25 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="test-el">
+
+  <template>
+
+    testing {{test}}
+
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'test-el',
+
+      properties: {
+        test: {
+          type: String,
+          value: 'poop'
+        }
+      }
+    });
+  })();
+</script>
