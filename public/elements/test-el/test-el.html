@@ -5,7 +5,7 @@
 
   <template>
 
-    Blah <div>{{boo}}</div>
+    test <span>{{boo}}</span>
 
   </template>
 
@@ -13,9 +13,13 @@
     Polymer({
       is: "test-el",
 
+      properties: {
+        boo: String
+      },
+
       ready: function() {
         // set this element's owner property
-        this.boo = "YARG";
+        //this.boo = "YARG";
       }
     });
   </script>

@@ -16,18 +16,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 
-    <paper-drawer-panel id="paperDrawerPanel" forceNarrow responsiveWidth="4000">
+    <paper-drawer-panel id="drawerPanel" drawer-width="400px" responsive-width="1000px">
 
       <div drawer>
-        drawer
+        <ul>
+          <li><a data-route="home" href="/">home</a></li>
+          <li><a data-route="users" href="/users">users</a></li>
+          <li><a data-route="contact" href="/contact">contact</a></li>
+        </ul>
       </div>
 
       <!-- Main Content -->
       <iron-pages main attr-for-selected="data-route" selected="{{route}}">
 
         <section data-route="home">
-          home
-          <test-el test="boo"></test-el>
+          home <span>{{route}}</span>
+          <test-el boo="yadda"></test-el>
         </section>
 
         <section data-route="users">
@@ -68,7 +72,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'yarnco-app',
 
       properties: {
+        route: String
+      },
 
+      ready: function() {
+
+        //this.boo = "YARG";
+
+        //this.$.drawerPanel.forceNarrow = true;
+        //this.$.drawerPanel.responsiveWidth = 4000;
       }
     });
   })();

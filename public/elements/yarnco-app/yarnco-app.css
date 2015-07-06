@@ -14,7 +14,7 @@
   /* Components */
 
   /* paper-drawer-panel */
-  --drawer-menu-color: #ffffff;
+  --drawer-menu-color: #333;
   --drawer-border-color: 1px solid #ccc;
   --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
 
