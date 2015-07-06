@@ -8,96 +8,57 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
 <dom-module id="my-app">
 
   <link rel="import" type="css" href="my-app.css">
 
   <template>
 
-    <paper-drawer-panel id="paperDrawerPanel" forceNarrow>
+    <paper-drawer-panel id="drawerPanel" drawer-width="400px" responsive-width="1000px">
+
       <div drawer>
+        <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}">
+            <a data-route="home" href="/">
+              <iron-icon icon="home"></iron-icon>
+              <span>Home</span>
+            </a>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span>Menu</span>
-        </paper-toolbar>
+            <a data-route="users" href="/users">
+              <iron-icon icon="info"></iron-icon>
+              <span>Users</span>
+            </a>
 
-        <!-- Drawer Content -->
-          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-              <a data-route="home" href="/">
-                <iron-icon icon="home"></iron-icon>
-                <span>Home</span>
-              </a>
-
-              <a data-route="users" href="/users">
-                <iron-icon icon="info"></iron-icon>
-                <span>Users</span>
-              </a>
-
-              <a data-route="contact" href="/contact">
-                <iron-icon icon="mail"></iron-icon>
-                <span>Contact</span>
-              </a>
-          </paper-menu>
+            <a data-route="contact" href="/contact">
+              <iron-icon icon="mail"></iron-icon>
+              <span>Contact</span>
+            </a>
+        </paper-menu>
       </div>
-      <paper-header-panel main mode="waterfall-tall">
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar">
-          <button tabindex="1" id="paperToggle" paper-drawer-toggle>
-            <iron-icon icon="menu" paper-drawer-toggle></iron-icon>
-          </button>
-          <span class="flex"></span>
 
-          <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
-          <div class="middle"></div>
+      <!-- Main Content -->
+      <iron-pages main attr-for-selected="data-route" selected="{{route}}">
 
-          <!-- Application name -->
-          <div class="appname bottom paper-font-display2">Polymer Starter Kit</div>
+        <section data-route="home">
+          <my-greeting></my-greeting>
+          <my-list></my-list>
+        </section>
 
-        </paper-toolbar>
+        <section data-route="users">
+          users
+        </section>
 
-        <!-- Main Content -->
-        <iron-pages attr-for-selected="data-route" selected="{{route}}">
+        <section data-route="user-info">
+          user-info
+        </section>
 
-          <section data-route="home">
-            <paper-material elevation="1">
-              <my-greeting></my-greeting>
+        <section data-route="contact">
+          contact
+        </section>
 
-              <p class="paper-font-subhead">You now have:</p>
-              <my-list></my-list>
+      </iron-pages>
 
-              <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
-            </paper-material>
-          </section>
-
-          <section data-route="users">
-            <paper-material elevation="1">
-              <h2 class="paper-font-display2">Users</h2>
-              <p>This is the users section</p>
-              <a href="/users/Rob">Rob</a>
-            </paper-material>
-          </section>
-
-          <section data-route="user-info">
-            <paper-material elevation="1">
-              <h2 class="paper-font-display2">
-              User:<span>{{params.name}}</span>
-              </h2>
-              <div>This is <span>{{params.name}}</span>'s section</div>
-            </paper-material>
-          </section>
-
-          <section data-route="contact">
-            <paper-material elevation="1">
-              <h2 class="paper-font-display2">Contact</h2>
-              <p>This is the contact section</p>
-            </paper-material>
-          </section>
-
-        </iron-pages>
-      </paper-header-panel>
     </paper-drawer-panel>
 
     <paper-toast id="caching-complete"
@@ -105,14 +66,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  text="Caching complete! This app will work offline.">
     </paper-toast>
 
-    <platinum-sw-register auto-register
+    <!--<platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
                           on-service-worker-installed="displayInstalledToast">
       <platinum-sw-cache  default-cache-strategy="networkFirst"
                           precache-file="precache.json">
       </platinum-sw-cache>
-    </platinum-sw-register>
+    </platinum-sw-register>-->
 
   </template>
 </dom-module>
@@ -122,7 +83,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-app',
 
       properties: {
+        route: String
+      },
 
+      ready: function() {
+
+        //this.boo = "YARG";
+
+        //this.$.drawerPanel.forceNarrow = true;
+        //this.$.drawerPanel.responsiveWidth = 4000;
       }
     });
   })();
