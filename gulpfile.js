@@ -163,7 +163,7 @@ gulp.task('vulcanize', function () {
 gulp.task('precache', function (callback) {
   var dir = 'dist';
 
-  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+  glob('{elements,scripts,css}/**/*.*', {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
