@@ -6,11 +6,18 @@
 
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 
-  <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="/elements/elements.html">
-
+  <!-- build:js js/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild-->
+  
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+  
+  <!-- build:css css/main.css -->
   {% for item in assets.css %}
-    <link rel="stylesheet" href="{{item}}{{version.cache}}"/>
+    <link rel="stylesheet" href="{{item}}{{version.cache}}">
   {% endfor %}
+  <!-- endbuild-->
+  
 {% endblock %}

@@ -33,9 +33,6 @@ files = _.map(files, function(file, key){
 
 var development = {
     js: js.concat([
-        //'bower_components/threejs/examples/js/libs/dat.gui.min.js',
-        //'bower_components/threejs/examples/js/controls/OrbitControls.js',
-        //'bower_components/threejs/examples/js/libs/stats.min.js',
         'js/app.js'
     ]),
     css: css.concat([
@@ -43,10 +40,12 @@ var development = {
     ])
 }
 
-var production = {
+// prod is a static build
+var production = {/*
     js: ['js/scripts.min.js'],
     css: ['css/styles.min.css']
-}
+*/}
+
 
 module.exports = {
     test: development,

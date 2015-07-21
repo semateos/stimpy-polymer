@@ -18,6 +18,7 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var merge = require('merge-stream');
 var path = require('path');
+var stream = require('stream');
 var fs = require('fs');
 var glob = require('glob');
 
@@ -79,6 +80,38 @@ gulp.task('images', function () {
     .pipe($.size({title: 'images'}));
 });
 
+gulp.task('index', function(done) {
+    
+  // Helper
+  function stringified(filename, string) {
+    
+    var src = stream.Readable({ objectMode: true })
+    src._read = function () {
+      this.push(new $.util.File({ cwd: "", base: "", path: filename, contents: new Buffer(string) }))
+      this.push(null)
+    }
+    return src;
+  }
+  
+  var starter = require('./server.js');
+  
+  // Get server
+  starter.server.register(starter.registerOpts, function(err) {
+    
+    // Grab the home page
+    starter.server.inject('/', function(res) {
+      
+      // Pipe the homepage to dist
+      stringified('index.html', res.payload)
+        .pipe(gulp.dest('dist/'))
+        .on('end', done);
+	  
+    });
+    
+  });
+  
+});
+
 // Copy All Files At The Root Level (app)
 gulp.task('copy', function () {
   var app = gulp.src([
@@ -118,10 +151,24 @@ gulp.task('fonts', function () {
 });
 
 // Scan Your HTML For Assets & Optimize Them
-gulp.task('html', function () {
-  var assets = $.useref.assets({searchPath: ['.tmp', 'public', 'dist']});
+gulp.task('html', ['index'], function () {
+  var assets = $.useref.assets({
+    searchPath: ['.tmp', 'public', 'dist'],
+    // Ignore cache-busting
+    transformPath: function(filePath) {
+      
+      var cacheBust = filePath.match(/\?v=[\w]*$/i);
+      
+      if (!cacheBust) {
+        
+        return filePath;
+      }
+        
+      return filePath.slice(0, cacheBust.index);
+    }
+  });
 
-  return gulp.src(['public/**/*.html', '!public/{elements,test}/**/*.html'])
+  return gulp.src(['dist/index.html', 'public/**/*.html', '!public/{elements,test}/**/*.html'])
     // Replace path for vulcanized assets
     .pipe($.if('*.html', $.replace('elements/elements.html', 'elements/elements.vulcanized.html')))
     .pipe(assets)
@@ -163,7 +210,7 @@ gulp.task('vulcanize', function () {
 gulp.task('precache', function (callback) {
   var dir = 'dist';
 
-  glob('{elements,scripts,css}/**/*.*', {cwd: dir}, function(error, files) {
+  glob('{elements,js,css}/**/*.*', {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
