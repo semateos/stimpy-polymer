@@ -18,6 +18,7 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var merge = require('merge-stream');
 var path = require('path');
+var stream = require('stream');
 var fs = require('fs');
 var glob = require('glob');
 
@@ -35,7 +36,7 @@ var AUTOPREFIXER_BROWSERS = [
 
 var styleTask = function (stylesPath, srcs) {
   return gulp.src(srcs.map(function(src) {
-      return path.join('app', stylesPath, src);
+      return path.join('public', stylesPath, src);
     }))
     .pipe($.changed(stylesPath, {extension: '.css'}))
     .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
@@ -47,7 +48,7 @@ var styleTask = function (stylesPath, srcs) {
 
 // Compile and Automatically Prefix Stylesheets
 gulp.task('styles', function () {
-  return styleTask('styles', ['**/*.css']);
+  return styleTask('css', ['**/*.css']);
 });
 
 gulp.task('elements', function () {
@@ -79,31 +80,62 @@ gulp.task('images', function () {
     .pipe($.size({title: 'images'}));
 });
 
+gulp.task('index', function(done) {
+    
+  // Helper
+  function stringified(filename, string) {
+    
+    var src = stream.Readable({ objectMode: true })
+    src._read = function () {
+      this.push(new $.util.File({ cwd: "", base: "", path: filename, contents: new Buffer(string) }))
+      this.push(null)
+    }
+    return src;
+  }
+  
+  var starter = require('./server.js');
+  
+  // Get server
+  starter.server.register(starter.registerOpts, function(err) {
+    
+    // Grab the home page
+    starter.server.inject('/', function(res) {
+      
+      // Pipe the homepage to dist
+      stringified('index.html', res.payload)
+        .pipe(gulp.dest('dist/'))
+        .on('end', done);
+	  
+    });
+    
+  });
+  
+});
+
 // Copy All Files At The Root Level (app)
 gulp.task('copy', function () {
   var app = gulp.src([
     'public/*',
     '!public/test',
-    '!public/precache.json',
-    'node_modules/apache-server-configs/dist/.htaccess'
+    '!public/precache.json'
   ], {
     dot: true
   }).pipe(gulp.dest('dist'));
 
   var bower = gulp.src([
-    'bower_components/**/*'
+    'public/bower_components/**/*'
   ]).pipe(gulp.dest('dist/bower_components'));
 
-  var elements = gulp.src(['app/elements/**/*.html'])
+  var elements = gulp.src(['public/elements/**/*.html'])
     .pipe(gulp.dest('dist/elements'));
 
-  var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
+  var swBootstrap = gulp.src(['public/bower_components/platinum-sw/bootstrap/*.js'])
     .pipe(gulp.dest('dist/elements/bootstrap'));
 
-  var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
+  var swToolbox = gulp.src(['public/bower_components/sw-toolbox/*.js'])
     .pipe(gulp.dest('dist/sw-toolbox'));
 
-  var vulcanized = gulp.src(['app/elements/elements.html'])
+  var vulcanized = gulp.src(['public/elements/elements.html'])
     .pipe($.rename('elements.vulcanized.html'))
     .pipe(gulp.dest('dist/elements'));
 
@@ -119,10 +151,24 @@ gulp.task('fonts', function () {
 });
 
 // Scan Your HTML For Assets & Optimize Them
-gulp.task('html', function () {
-  var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
+gulp.task('html', ['index'], function () {
+  var assets = $.useref.assets({
+    searchPath: ['.tmp', 'public', 'dist'],
+    // Ignore cache-busting
+    transformPath: function(filePath) {
+      
+      var cacheBust = filePath.match(/\?v=[\w]*$/i);
+      
+      if (!cacheBust) {
+        
+        return filePath;
+      }
+        
+      return filePath.slice(0, cacheBust.index);
+    }
+  });
 
-  return gulp.src(['public/**/*.html', '!public/{elements,test}/**/*.html'])
+  return gulp.src(['dist/index.html', 'public/**/*.html', '!public/{elements,test}/**/*.html'])
     // Replace path for vulcanized assets
     .pipe($.if('*.html', $.replace('elements/elements.html', 'elements/elements.vulcanized.html')))
     .pipe(assets)
@@ -164,11 +210,11 @@ gulp.task('vulcanize', function () {
 gulp.task('precache', function (callback) {
   var dir = 'dist';
 
-  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+  glob('{elements,js,css}/**/*.*', {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
-      files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents.min.js');
+      files.push('index.html', './', 'public/bower_components/webcomponentsjs/webcomponents.min.js');
       var filePath = path.join(dir, 'precache.json');
       fs.writeFile(filePath, JSON.stringify(files), callback);
     }
@@ -177,41 +223,6 @@ gulp.task('precache', function (callback) {
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
-
-// Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements', 'images'], function () {
-  browserSync({
-    notify: false,
-    // Run as an https by uncommenting 'https: true'
-    // Note: this uses an unsigned certificate which on first access
-    //       will present a certificate warning in the browser.
-    // https: true,
-    server: {
-      baseDir: ['.tmp', 'public'],
-      routes: {
-        '/bower_components': 'bower_components'
-      }
-    }
-  });
-
-  gulp.watch(['public/**/*.html'], reload);
-  gulp.watch(['public/styles/**/*.css'], ['styles', reload]);
-  gulp.watch(['public/elements/**/*.css'], ['elements', reload]);
-  gulp.watch(['public/{scripts,elements}/**/*.js'], ['jshint']);
-  gulp.watch(['public/images/**/*'], reload);
-});
-
-// Build and serve the output from the dist build
-gulp.task('serve:dist', ['default'], function () {
-  browserSync({
-    notify: false,
-    // Run as an https by uncommenting 'https: true'
-    // Note: this uses an unsigned certificate which on first access
-    //       will present a certificate warning in the browser.
-    // https: true,
-    server: 'dist'
-  });
-});
 
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {

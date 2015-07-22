@@ -1,5 +1,7 @@
 {% block foot %}
+    <!-- build:js js/app.js -->
     {% for item in assets.js %}
         <script src="{{item}}{{version.cache}}"></script>
     {% endfor %}
+    <!-- endbuild-->
 {% endblock %}

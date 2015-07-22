@@ -9,8 +9,7 @@ module.exports = function(server, options) {
 	if (Config.serveBuild) {
 
 		routers = [
-			'./build',
-			'./static'
+			'./build'
 		];
 	} else {
 
