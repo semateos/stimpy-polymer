@@ -43,7 +43,17 @@ var startSync = function(){
   if(config.env == 'development' && !browserSync.active){
 
     browserSync.init({
-
+      
+      notify: false,
+      snippetOptions: {
+        rule: {
+          match: '<span id="browser-sync-binding"></span>',
+          fn: function (snippet) {
+            return snippet;
+          }
+        }
+      },
+      
       proxy: "localhost:3000",
       files: [
         'public/**/*.{js,css,html}',
